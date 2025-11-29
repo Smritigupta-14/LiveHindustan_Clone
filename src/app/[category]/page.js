@@ -11,12 +11,13 @@ import { getNewsData } from '@/lib/api';
 
 export const revalidate = 300;
 
-export default async function Home() {
+export default async function Category() {
   const newsData = await getNewsData();
   
   return (
     <>
       
+    
       <main className={styles.main}>
         <div className={styles.container}>
           
@@ -27,9 +28,6 @@ export default async function Home() {
           
           <div className={styles.mainGrid}>
             <div className={styles.mainContent}>
-              <TrendingTopics />
-              
-              <TopStories articles={newsData.topStories} slug={"topStories"} />
               
               <CategorySection 
                 title="क्रिकेट" 
@@ -68,7 +66,14 @@ export default async function Home() {
   );
 }
 
-export const metadata = {
-  title: 'Live Hindustan - हिंदी न्यूज़, ताज़ा समाचार, Breaking News in Hindi',
-  description: 'लाइव हिंदुस्तान पर पढ़ें आज की ताजा खबरें - देश, विदेश, क्रिकेट, मनोरंजन, बिज़नेस और राज्य की खबरें।',
-};
+
+export async function generateMetadata({ params }) {
+  const { category } = await params;
+
+  const categoryName = category.charAt(0).toUpperCase() + category.slice(1);
+  
+  return {
+    title: `${categoryName} - Live Hindustan - हिंदी न्यूज़, ताज़ा समाचार, Breaking News in Hindi`,
+    description: `लाइव हिंदुस्तान पर पढ़ें ${categoryName} की ताजा खबरें - देश, विदेश, क्रिकेट, मनोरंजन, बिज़नेस और राज्य की खबरें।`,
+  };
+}
